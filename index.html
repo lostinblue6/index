@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你的"精神颜色"是什么？</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            transition: all 0.5s ease;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #5a67d8;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .question {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #2d3748;
+            text-align: center;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        @media (min-width: 600px) {
+            .options {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .option {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .option:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+        
+        .option.selected {
+            background: #ebf8ff;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .progress-container {
+            margin: 30px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #718096;
+        }
+        
+        .result-container {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .color-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+        
+        .result-description {
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 30px;
+            color: #4a5568;
+        }
+        
+        .restart-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="intro-page" class="fade-in">
+            <h1>你的"精神颜色"是什么？</h1>
+            <p class="subtitle">揭示你灵魂的本质颜色</p>
+            <div class="intro">
+                <p>这不是测试你喜欢的颜色，而是探索你灵魂的本质颜色。</p>
+                <p>通过一系列情境选择，我们将揭示你内在的能量是炽热的红色、深邃的蓝色，还是充满生机的绿色？</p>
+                <p>这反映了你的核心情绪和影响力。</p>
+            </div>
+            <button id="start-btn" class="btn">开始测试</button>
+        </div>
+        
+        <div id="test-page" class="hidden">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress-bar"></div>
+                </div>
+                <div class="progress-text" id="progress-text">问题 1 / 5</div>
+            </div>
+            
+            <div class="card">
+                <div class="question" id="question">问题加载中...</div>
+                <div class="options" id="options">
+                    <!-- 选项将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <button id="next-btn" class="btn">下一题</button>
+        </div>
+        
+        <div id="result-page" class="hidden">
+            <div class="result-container">
+                <div class="color-circle" id="result-color">?</div>
+                <h2 class="result-title" id="result-title">你的精神颜色是：</h2>
+                <div class="result-description" id="result-description">
+                    <!-- 结果描述将通过JavaScript动态生成 -->
+                </div>
+                <button id="restart-btn" class="restart-btn">重新测试</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 测试问题和选项
+        const questions = [
+            {
+                question: "当你面对压力时，你的第一反应是？",
+                options: [
+                    { text: "直面挑战，积极解决问题", color: "red" },
+                    { text: "冷静分析，寻找最佳方案", color: "blue" },
+                    { text: "寻求支持，与他人合作", color: "green" },
+                    { text: "暂时逃避，等待情绪平复", color: "purple" }
+                ]
+            },
+            {
+                question: "在社交场合中，你通常扮演什么角色？",
+                options: [
+                    { text: "活跃气氛的中心人物", color: "red" },
+                    { text: "倾听者和观察者", color: "blue" },
+                    { text: "协调者和支持者", color: "green" },
+                    { text: "创意提出者和梦想家", color: "purple" }
+                ]
+            },
+            {
+                question: "你如何做出重要决定？",
+                options: [
+                    { text: "凭直觉快速决定", color: "red" },
+                    { text: "收集大量信息后理性分析", color: "blue" },
+                    { text: "考虑他人感受和影响", color: "green" },
+                    { text: "想象各种可能性后再选择", color: "purple" }
+                ]
+            },
+            {
+                question: "你理想中的休闲时光是？",
+                options: [
+                    { text: "冒险和刺激的活动", color: "red" },
+                    { text: "安静阅读或独自思考", color: "blue" },
+                    { text: "与亲友共度温馨时光", color: "green" },
+                    { text: "探索新领域或创作", color: "purple" }
+                ]
+            },
+            {
+                question: "你如何看待改变？",
+                options: [
+                    { text: "拥抱变化，视之为机遇", color: "red" },
+                    { text: "谨慎评估，逐步适应", color: "blue" },
+                    { text: "在稳定中寻求渐进改变", color: "green" },
+                    { text: "创造变化，引领新方向", color: "purple" }
+                ]
+            }
+        ];
+
+        // 结果描述
+        const results = {
+            red: {
+                title: "炽热红色",
+                description: "你的精神颜色是炽热的红色！你充满活力和激情，拥有强大的行动力和领导能力。你像一团燃烧的火焰，能够照亮前路并激励他人。你的核心能量是勇气和决心，面对挑战时从不退缩。红色精神的人通常直接、果断，能够快速做出决策并付诸行动。你需要在生活中找到平衡，避免因过于冲动而忽视细节和他人的感受。",
+                color: "#e53e3e"
+            },
+            blue: {
+                title: "深邃蓝色",
+                description: "你的精神颜色是深邃的蓝色！你拥有冷静的头脑和深刻的思考能力，像宁静的海洋一样深邃而广阔。你善于分析和反思，能够在复杂情况下保持清晰的思维。蓝色精神的人通常理性、可靠，是他人信赖的对象。你的核心能量是智慧和冷静，但需要注意不要过于沉浸在自己的思考中，适时表达情感和与他人连接。",
+                color: "#3182ce"
+            },
+            green: {
+                title: "生机绿色",
+                description: "你的精神颜色是充满生机的绿色！你像春天的新芽，充满希望和成长的能量。你重视和谐与平衡，善于理解和支持他人。绿色精神的人通常富有同情心、耐心，是优秀的团队合作者和倾听者。你的核心能量是滋养和成长，能够在困难时期给予他人支持和鼓励。保持你的开放心态，但也要学会设立边界，保护自己的能量。",
+                color: "#38a169"
+            },
+            purple: {
+                title: "神秘紫色",
+                description: "你的精神颜色是神秘的紫色！你拥有独特的创造力和直觉力，像夜空中的星辰一样闪烁着灵感的光芒。你善于看到事物的不同面向，能够连接看似无关的概念。紫色精神的人通常富有想象力、洞察力，是创新和变革的推动者。你的核心能量是灵感和直觉，但需要注意将想法落地实施，与现实保持连接。",
+                color: "#805ad5"
+            }
+        };
+
+        // DOM元素
+        const introPage = document.getElementById('intro-page');
+        const testPage = document.getElementById('test-page');
+        const resultPage = document.getElementById('result-page');
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const resultColor = document.getElementById('result-color');
+        const resultTitle = document.getElementById('result-title');
+        const resultDescription = document.getElementById('result-description');
+
+        // 测试状态
+        let currentQuestion = 0;
+        let selectedOptions = [];
+        let selectedOption = null;
+
+        // 开始测试
+        startBtn.addEventListener('click', () => {
+            introPage.classList.add('hidden');
+            testPage.classList.remove('hidden');
+            testPage.classList.add('fade-in');
+            loadQuestion();
+        });
+
+        // 下一题
+        nextBtn.addEventListener('click', () => {
+            if (selectedOption === null) {
+                alert('请选择一个选项');
+                return;
+            }
+            
+            selectedOptions.push(selectedOption);
+            selectedOption = null;
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        });
+
+        // 重新测试
+        restartBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            selectedOptions = [];
+            selectedOption = null;
+            
+            resultPage.classList.add('hidden');
+            introPage.classList.remove('hidden');
+            introPage.classList.add('fade-in');
+        });
+
+        // 加载问题
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            questionElement.textContent = question.question;
+            
+            // 清除选项
+            optionsElement.innerHTML = '';
+            
+            // 添加选项
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option.text;
+                optionElement.dataset.color = option.color;
+                
+                optionElement.addEventListener('click', () => {
+                    // 移除之前的选择
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // 选择当前选项
+                    optionElement.classList.add('selected');
+                    selectedOption = option.color;
+                });
+                
+                optionsElement.appendChild(optionElement);
+            });
+            
+            // 更新进度条
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `问题 ${currentQuestion + 1} / ${questions.length}`;
+            
+            // 如果是最后一题，更改按钮文本
+            nextBtn.textContent = currentQuestion === questions.length - 1 ? '查看结果' : '下一题';
+        }
+
+        // 显示结果
+        function showResult() {
+            // 计算最频繁的颜色
+            const colorCount = {};
+            selectedOptions.forEach(color => {
+                colorCount[color] = (colorCount[color] || 0) + 1;
+            });
+            
+            let maxCount = 0;
+            let resultColorType = 'red';
+            
+            for (const color in colorCount) {
+                if (colorCount[color] > maxCount) {
+                    maxCount = colorCount[color];
+                    resultColorType = color;
+                }
+            }
+            
+            // 显示结果
+            const result = results[resultColorType];
+            resultColor.style.backgroundColor = result.color;
+            resultColor.textContent = result.title;
+            resultTitle.textContent = `你的精神颜色是：${result.title}`;
+            resultDescription.textContent = result.description;
+            
+            testPage.classList.add('hidden');
+            resultPage.classList.remove('hidden');
+            resultPage.classList.add('fade-in');
+        }
+    </script>
+</body>
+</html>
