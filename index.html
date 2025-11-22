@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>你的"精神颜色"是什么？</title>
+    <title>你的"精神颜色"是什么？ | 心理学人格测试</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #6e8efb;
+            --secondary: #a777e3;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
         body {
@@ -20,22 +29,36 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            line-height: 1.6;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
             padding: 40px;
             transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #ff6b6b, #6e8efb, #a777e3, #4ecdc4);
+            z-index: 10;
         }
         
         h1 {
             text-align: center;
             color: #5a67d8;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-size: 2.5rem;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
@@ -45,6 +68,7 @@
             color: #718096;
             margin-bottom: 30px;
             font-size: 1.2rem;
+            font-weight: 500;
         }
         
         .intro {
@@ -52,6 +76,16 @@
             margin-bottom: 40px;
             line-height: 1.6;
             color: #4a5568;
+            padding: 0 20px;
+        }
+        
+        .psychology-note {
+            background: #f0f9ff;
+            border-left: 4px solid #6e8efb;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
         }
         
         .card {
@@ -61,6 +95,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 30px;
             transition: transform 0.3s ease;
+            position: relative;
         }
         
         .card:hover {
@@ -72,6 +107,7 @@
             margin-bottom: 20px;
             color: #2d3748;
             text-align: center;
+            font-weight: 600;
         }
         
         .options {
@@ -94,6 +130,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
         }
         
         .option:hover {
@@ -107,9 +147,14 @@
             box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
         }
         
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
         .btn {
             display: block;
-            width: 100%;
             padding: 15px;
             background: linear-gradient(to right, #6e8efb, #a777e3);
             color: white;
@@ -119,7 +164,9 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 20px;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
         }
         
         .btn:hover {
@@ -129,6 +176,29 @@
         
         .btn:active {
             transform: translateY(1px);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::after {
+            left: 100%;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, #a0aec0, #718096);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(to right, #718096, #4a5568);
         }
         
         .progress-container {
@@ -153,6 +223,7 @@
             text-align: center;
             margin-top: 10px;
             color: #718096;
+            font-weight: 500;
         }
         
         .result-container {
@@ -173,6 +244,21 @@
             font-weight: bold;
             color: white;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .color-circle::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: inherit;
+            filter: blur(20px);
+            opacity: 0.7;
+            z-index: -1;
         }
         
         .result-title {
@@ -186,6 +272,38 @@
             text-align: left;
             margin-bottom: 30px;
             color: #4a5568;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .traits-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .trait {
+            background: #e9ecef;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        
+        .psychology-basis {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #6e8efb;
+        }
+        
+        .psychology-basis h3 {
+            color: #5a67d8;
+            margin-bottom: 10px;
         }
         
         .restart-btn {
@@ -199,6 +317,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-top: 20px;
         }
         
         .restart-btn:hover {
@@ -218,19 +337,126 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .color-item {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .color-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .color-sample {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .color-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .color-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+            }
+        }
+        
+        .question-number {
+            text-align: center;
+            color: #6e8efb;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="intro-page" class="fade-in">
-            <h1>你的"精神颜色"是什么？</h1>
-            <p class="subtitle">揭示你灵魂的本质颜色</p>
+            <h1><i class="fas fa-palette"></i> 你的"精神颜色"是什么？</h1>
+            <p class="subtitle">基于心理学原理的灵魂本质探索</p>
             <div class="intro">
-                <p>这不是测试你喜欢的颜色，而是探索你灵魂的本质颜色。</p>
-                <p>通过一系列情境选择，我们将揭示你内在的能量是炽热的红色、深邃的蓝色，还是充满生机的绿色？</p>
-                <p>这反映了你的核心情绪和影响力。</p>
+                <p>这不是普通的颜色偏好测试，而是基于荣格心理学和大五人格理论设计的深度人格评估。</p>
+                <p>通过12个情境选择，我们将揭示你内在的精神颜色，反映你的核心人格特质、情感模式和能量类型。</p>
+                
+                <div class="psychology-note">
+                    <p><strong>心理学基础：</strong> 本测试基于色彩心理学和人格理论，将颜色与人格特质相关联。例如，红色常与能量和行动力相关，蓝色与冷静和理性思维相关，这些关联在心理学研究中得到了一定支持。</p>
+                </div>
+                
+                <h3>探索8种精神颜色</h3>
+                <div class="color-grid">
+                    <div class="color-item">
+                        <div class="color-sample" style="background: #e53e3e;"></div>
+                        <div class="color-name">炽热红</div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-sample" style="background: #3182ce;"></div>
+                        <div class="color-name">深邃蓝</div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-sample" style="background: #38a169;"></div>
+                        <div class="color-name">生机绿</div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-sample" style="background: #805ad5;"></div>
+                        <div class="color-name">神秘紫</div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-sample" style="background: #ed8936;"></div>
+                        <div class="color-name">温暖橙</div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-sample" style="background: #fbb6ce;"></div>
+                        <div class="color-name">柔和粉</div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-sample" style="background: #f6e05e;"></div>
+                        <div class="color-name">阳光黄</div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-sample" style="background: #4fd1c7;"></div>
+                        <div class="color-name">宁静青</div>
+                    </div>
+                </div>
             </div>
-            <button id="start-btn" class="btn">开始测试</button>
+            <button id="start-btn" class="btn">开始探索我的精神颜色</button>
+            
+            <div class="footer">
+                <p>本测试基于心理学原理设计，结果仅供参考。人格是复杂多维的，不应被单一测试完全定义。</p>
+            </div>
         </div>
         
         <div id="test-page" class="hidden">
@@ -238,102 +464,220 @@
                 <div class="progress-bar">
                     <div class="progress" id="progress-bar"></div>
                 </div>
-                <div class="progress-text" id="progress-text">问题 1 / 5</div>
+                <div class="progress-text" id="progress-text">问题 1 / 12</div>
             </div>
             
             <div class="card">
+                <div class="question-number" id="question-number">问题 1</div>
                 <div class="question" id="question">问题加载中...</div>
                 <div class="options" id="options">
                     <!-- 选项将通过JavaScript动态生成 -->
                 </div>
             </div>
             
-            <button id="next-btn" class="btn">下一题</button>
+            <div class="btn-container">
+                <button id="prev-btn" class="btn btn-secondary">返回上一题</button>
+                <button id="next-btn" class="btn">下一题</button>
+            </div>
         </div>
         
         <div id="result-page" class="hidden">
             <div class="result-container">
                 <div class="color-circle" id="result-color">?</div>
                 <h2 class="result-title" id="result-title">你的精神颜色是：</h2>
+                
+                <div class="traits-container" id="traits-container">
+                    <!-- 特质标签将通过JavaScript动态生成 -->
+                </div>
+                
                 <div class="result-description" id="result-description">
                     <!-- 结果描述将通过JavaScript动态生成 -->
                 </div>
+                
+                <div class="psychology-basis">
+                    <h3><i class="fas fa-brain"></i> 心理学基础</h3>
+                    <p id="psychology-basis">心理学基础说明加载中...</p>
+                </div>
+                
                 <button id="restart-btn" class="restart-btn">重新测试</button>
+            </div>
+            
+            <div class="footer">
+                <p>人格是流动的，会随着经历和成长而变化。此测试结果反映了您当前的状态。</p>
             </div>
         </div>
     </div>
 
     <script>
-        // 测试问题和选项
+        // 基于心理学原理设计的测试问题和选项
         const questions = [
             {
-                question: "当你面对压力时，你的第一反应是？",
+                question: "当你面对压力或挑战时，你的第一反应是？",
                 options: [
-                    { text: "直面挑战，积极解决问题", color: "red" },
-                    { text: "冷静分析，寻找最佳方案", color: "blue" },
-                    { text: "寻求支持，与他人合作", color: "green" },
-                    { text: "暂时逃避，等待情绪平复", color: "purple" }
+                    { text: "立即行动，直面问题", color: "red", traits: ["行动导向", "果断"] },
+                    { text: "冷静分析，制定计划", color: "blue", traits: ["理性", "分析性"] },
+                    { text: "寻求支持，与他人讨论", color: "green", traits: ["社交", "合作"] },
+                    { text: "退后一步，重新评估情况", color: "purple", traits: ["反思", "直觉"] }
                 ]
             },
             {
-                question: "在社交场合中，你通常扮演什么角色？",
+                question: "在社交聚会中，你通常扮演什么角色？",
                 options: [
-                    { text: "活跃气氛的中心人物", color: "red" },
-                    { text: "倾听者和观察者", color: "blue" },
-                    { text: "协调者和支持者", color: "green" },
-                    { text: "创意提出者和梦想家", color: "purple" }
+                    { text: "活跃气氛，带动大家", color: "orange", traits: ["外向", "热情"] },
+                    { text: "倾听他人，深入交流", color: "pink", traits: ["共情", "关怀"] },
+                    { text: "观察环境，分析互动", color: "blue", traits: ["观察力", "理性"] },
+                    { text: "创意提出，激发讨论", color: "yellow", traits: ["创意", "灵感"] }
                 ]
             },
             {
-                question: "你如何做出重要决定？",
+                question: "你如何做出重要的人生决定？",
                 options: [
-                    { text: "凭直觉快速决定", color: "red" },
-                    { text: "收集大量信息后理性分析", color: "blue" },
-                    { text: "考虑他人感受和影响", color: "green" },
-                    { text: "想象各种可能性后再选择", color: "purple" }
+                    { text: "凭直觉和内心感受", color: "purple", traits: ["直觉", "感性"] },
+                    { text: "收集数据，理性分析利弊", color: "blue", traits: ["逻辑", "分析"] },
+                    { text: "咨询信任的人的意见", color: "green", traits: ["合作", "社交"] },
+                    { text: "跟随激情和冲动", color: "red", traits: ["热情", "行动"] }
                 ]
             },
             {
-                question: "你理想中的休闲时光是？",
+                question: "你理想中的休闲时光是怎样的？",
                 options: [
-                    { text: "冒险和刺激的活动", color: "red" },
-                    { text: "安静阅读或独自思考", color: "blue" },
-                    { text: "与亲友共度温馨时光", color: "green" },
-                    { text: "探索新领域或创作", color: "purple" }
+                    { text: "冒险和刺激的活动", color: "red", traits: ["冒险", "活力"] },
+                    { text: "与亲友共度温馨时光", color: "pink", traits: ["亲密", "关怀"] },
+                    { text: "安静阅读或独自思考", color: "teal", traits: ["内省", "平静"] },
+                    { text: "学习新技能或知识", color: "yellow", traits: ["好奇", "学习"] }
                 ]
             },
             {
-                question: "你如何看待改变？",
+                question: "你如何看待规则和传统？",
                 options: [
-                    { text: "拥抱变化，视之为机遇", color: "red" },
-                    { text: "谨慎评估，逐步适应", color: "blue" },
-                    { text: "在稳定中寻求渐进改变", color: "green" },
-                    { text: "创造变化，引领新方向", color: "purple" }
+                    { text: "必要时可以打破，追求效率", color: "orange", traits: ["灵活", "实用"] },
+                    { text: "应该尊重和遵循", color: "blue", traits: ["秩序", "纪律"] },
+                    { text: "在关怀他人的前提下灵活应用", color: "green", traits: ["关怀", "和谐"] },
+                    { text: "质疑并思考改进方法", color: "purple", traits: ["创新", "批判思维"] }
+                ]
+            },
+            {
+                question: "当你情绪低落时，你通常会？",
+                options: [
+                    { text: "通过运动或活动释放情绪", color: "red", traits: ["活力", "行动"] },
+                    { text: "分析情绪来源并解决", color: "blue", traits: ["理性", "解决问题"] },
+                    { text: "与亲友倾诉寻求安慰", color: "pink", traits: ["社交", "情感表达"] },
+                    { text: "独处反思，等待情绪过去", color: "teal", traits: ["内省", "平静"] }
+                ]
+            },
+            {
+                question: "在团队项目中，你通常贡献什么？",
+                options: [
+                    { text: "推动项目前进的动力", color: "red", traits: ["领导力", "动力"] },
+                    { text: "创意想法和解决方案", color: "yellow", traits: ["创意", "创新"] },
+                    { text: "组织协调和细节管理", color: "blue", traits: ["组织", "细致"] },
+                    { text: "维持团队和谐与士气", color: "green", traits: ["和谐", "支持"] }
+                ]
+            },
+            {
+                question: "你如何学习新事物？",
+                options: [
+                    { text: "通过实践和尝试", color: "orange", traits: ["实践", "体验"] },
+                    { text: "系统性地研究和分析", color: "blue", traits: ["系统化", "分析"] },
+                    { text: "与他人讨论和分享", color: "green", traits: ["合作", "社交学习"] },
+                    { text: "凭直觉和灵感理解", color: "purple", traits: ["直觉", "洞察"] }
+                ]
+            },
+            {
+                question: "你如何看待未来？",
+                options: [
+                    { text: "充满机遇，积极期待", color: "yellow", traits: ["乐观", "希望"] },
+                    { text: "需要谨慎规划", color: "blue", traits: ["谨慎", "规划"] },
+                    { text: "关注当下，未来随缘", color: "green", traits: ["当下", "接纳"] },
+                    { text: "充满无限可能性", color: "purple", traits: ["想象", "可能性"] }
+                ]
+            },
+            {
+                question: "在人际关系中，你最重视什么？",
+                options: [
+                    { text: "真诚和直接", color: "red", traits: ["真诚", "直接"] },
+                    { text: "深度理解和连接", color: "pink", traits: ["深度", "情感连接"] },
+                    { text: "智慧和刺激的对话", color: "yellow", traits: ["智力刺激", "交流"] },
+                    { text: "稳定和可靠性", color: "teal", traits: ["稳定", "可靠"] }
+                ]
+            },
+            {
+                question: "你如何处理冲突？",
+                options: [
+                    { text: "直接面对，尽快解决", color: "red", traits: ["直接", "解决导向"] },
+                    { text: "冷静分析各方立场", color: "blue", traits: ["理性", "分析"] },
+                    { text: "寻求妥协和和谐方案", color: "green", traits: ["和谐", "妥协"] },
+                    { text: "暂时回避，冷静后再处理", color: "teal", traits: ["冷静", "耐心"] }
+                ]
+            },
+            {
+                question: "什么最能激发你的动力？",
+                options: [
+                    { text: "挑战和竞争", color: "orange", traits: ["竞争", "挑战"] },
+                    { text: "个人成长和发展", color: "yellow", traits: ["成长", "学习"] },
+                    { text: "帮助他人和社会贡献", color: "green", traits: ["利他", "社会价值"] },
+                    { text: "内在的愿景和理想", color: "purple", traits: ["理想", "愿景"] }
                 ]
             }
         ];
 
-        // 结果描述
+        // 基于心理学的结果描述
         const results = {
             red: {
                 title: "炽热红色",
-                description: "你的精神颜色是炽热的红色！你充满活力和激情，拥有强大的行动力和领导能力。你像一团燃烧的火焰，能够照亮前路并激励他人。你的核心能量是勇气和决心，面对挑战时从不退缩。红色精神的人通常直接、果断，能够快速做出决策并付诸行动。你需要在生活中找到平衡，避免因过于冲动而忽视细节和他人的感受。",
-                color: "#e53e3e"
+                description: "你的精神颜色是炽热的红色！基于心理学分析，你表现出高度的外向性和行动导向。红色精神的人通常充满活力和激情，拥有强大的行动力和决断力。你的核心能量是勇气和动力，面对挑战时倾向于直接行动而非过度思考。在压力下，你可能表现出竞争性和急躁倾向，但同时也具备领导力和执行力。心理学上，这与高水平的能量寻求和行为激活系统相关。",
+                psychology: "红色在色彩心理学中与能量、行动和激情相关。人格心理学中，这对应高外向性、行动导向和较低的神经质水平。研究表明，偏好红色的人往往更具竞争性和主导性，这与进化心理学中红色作为警示和优势信号的角色一致。",
+                color: "#e53e3e",
+                traits: ["行动导向", "充满活力", "果断", "领导力", "竞争性", "热情"]
             },
             blue: {
                 title: "深邃蓝色",
-                description: "你的精神颜色是深邃的蓝色！你拥有冷静的头脑和深刻的思考能力，像宁静的海洋一样深邃而广阔。你善于分析和反思，能够在复杂情况下保持清晰的思维。蓝色精神的人通常理性、可靠，是他人信赖的对象。你的核心能量是智慧和冷静，但需要注意不要过于沉浸在自己的思考中，适时表达情感和与他人连接。",
-                color: "#3182ce"
+                description: "你的精神颜色是深邃的蓝色！心理学分析显示，你具有高度的理性思维和分析能力。蓝色精神的人通常冷静、有条理，善于在复杂情况下保持清晰的思维。你的核心特质是逻辑性和可靠性，决策时倾向于收集信息并理性分析。在人际关系中，你可能是值得信赖的建议者，但有时可能显得过于理性而忽视情感因素。这种特质在大五人格模型中对应高尽责性和开放性。",
+                psychology: "蓝色在心理学中与冷静、理性和信任相关。认知心理学研究表明，偏好蓝色的人往往具有更强的分析能力和结构化思维。神经科学研究发现，蓝色环境能促进创造性思维和专注力，这与蓝色精神人群的认知特点相符。",
+                color: "#3182ce",
+                traits: ["理性", "分析性", "可靠", "有条理", "谨慎", "细致"]
             },
             green: {
                 title: "生机绿色",
-                description: "你的精神颜色是充满生机的绿色！你像春天的新芽，充满希望和成长的能量。你重视和谐与平衡，善于理解和支持他人。绿色精神的人通常富有同情心、耐心，是优秀的团队合作者和倾听者。你的核心能量是滋养和成长，能够在困难时期给予他人支持和鼓励。保持你的开放心态，但也要学会设立边界，保护自己的能量。",
-                color: "#38a169"
+                description: "你的精神颜色是充满生机的绿色！心理学评估表明，你具有高度的宜人性和合作精神。绿色精神的人通常富有同情心、耐心，重视和谐与平衡。你的核心能量是滋养和支持，善于理解他人并建立深厚关系。在团队中，你是优秀的合作者和调解者，但可能因过度关注他人需求而忽视自己的界限。这种特质对应大五人格模型中的高宜人性和中等外向性。",
+                psychology: "绿色在色彩心理学中与平衡、和谐和成长相关。社会心理学研究表明，绿色环境能促进合作行为和亲社会态度。进化心理学角度，绿色与自然和生命力联系，反映了对社区和相互依赖的重视，这与绿色精神人群的社会导向相符。",
+                color: "#38a169",
+                traits: ["合作", "支持", "和谐", "耐心", "共情", "平衡"]
             },
             purple: {
                 title: "神秘紫色",
-                description: "你的精神颜色是神秘的紫色！你拥有独特的创造力和直觉力，像夜空中的星辰一样闪烁着灵感的光芒。你善于看到事物的不同面向，能够连接看似无关的概念。紫色精神的人通常富有想象力、洞察力，是创新和变革的推动者。你的核心能量是灵感和直觉，但需要注意将想法落地实施，与现实保持连接。",
-                color: "#805ad5"
+                description: "你的精神颜色是神秘的紫色！心理学分析显示，你具有高度的开放性和直觉能力。紫色精神的人通常富有想象力、洞察力，能够连接看似无关的概念并看到事物的深层含义。你的核心特质是创造力和灵性，倾向于凭直觉和理解而非纯粹逻辑做决定。在创新和变革环境中，你表现出色，但可能因过度理想化而忽视现实约束。这种特质在大五人格模型中对应高开放性和中等尽责性。",
+                psychology: "紫色在心理学中与灵性、创造力和智慧相关。认知心理学研究发现，偏好紫色的人往往具有更强的发散性思维和直觉判断能力。历史上，紫色常与皇室和神秘主义联系，反映了一种连接平凡与非凡的能力，这与紫色精神人群的特点一致。",
+                color: "#805ad5",
+                traits: ["创意", "直觉", "灵性", "洞察力", "想象力", "理想主义"]
+            },
+            orange: {
+                title: "温暖橙色",
+                description: "你的精神颜色是温暖橙色！心理学评估表明，你具有高度的外向性和体验寻求倾向。橙色精神的人通常热情、友好，善于社交并享受生活中的乐趣。你的核心能量是热情和适应力，能够灵活应对变化并从中找到机会。在社交场合中，你充满魅力且易于相处，但可能因追求新鲜感而缺乏持久性。这种特质在大五人格模型中对应高外向性和开放性。",
+                psychology: "橙色在色彩心理学中与热情、创造力和冒险相关。积极心理学研究表明，橙色能激发乐观情绪和社会互动。从进化角度，橙色作为日落和火焰的颜色，与温暖、能量和社交聚集相关，这与橙色精神人群的社交热情相符。",
+                color: "#ed8936",
+                traits: ["热情", "友好", "适应力", "乐观", "冒险", "社交"]
+            },
+            pink: {
+                title: "柔和粉色",
+                description: "你的精神颜色是柔和粉色！心理学分析显示，你具有高度的宜人性和情感表达能力。粉色精神的人通常关怀、体贴，重视亲密关系和情感连接。你的核心特质是滋养和无条件支持，能够为他人提供情感安全和理解。在关怀职业和亲密关系中，你表现出色，但可能因过度关注他人而忽视自我需求。这种特质对应大五人格模型中的高宜人性和情感开放性。",
+                psychology: "粉色在心理学中与关怀、抚慰和无条件爱相关。发展心理学研究表明，粉色环境能促进平静和安全感。社会心理学角度，粉色常与养育和同情心联系，反映了对他人福祉的深切关注，这与粉色精神人群的情感特点相符。",
+                color: "#fbb6ce",
+                traits: ["关怀", "体贴", "滋养", "情感表达", "同情心", "支持"]
+            },
+            yellow: {
+                title: "阳光黄色",
+                description: "你的精神颜色是阳光黄色！心理学评估表明，你具有高度的开放性和乐观倾向。黄色精神的人通常充满好奇心、创造力，能够看到可能性并激发他人灵感。你的核心能量是乐观和智力刺激，善于从不同角度思考问题并提出创新解决方案。在学习和创意环境中，你表现出色，但可能因过度关注想法而忽视实际执行。这种特质在大五人格模型中对应高开放性和外向性。",
+                psychology: "黄色在色彩心理学中与乐观、智力和创造力相关。认知心理学研究发现，黄色能刺激心智活动和创新思维。从文化角度，黄色作为阳光的颜色，与启蒙、智慧和欢乐联系，这与黄色精神人群的智力热情和乐观态度相符。",
+                color: "#f6e05e",
+                traits: ["乐观", "创意", "好奇", "智慧", "灵感", "积极"]
+            },
+            teal: {
+                title: "宁静青",
+                description: "你的精神颜色是宁静青色！心理学分析显示，你具有高度的情绪稳定性和内省倾向。青色精神的人通常平静、深思，能够在混乱中保持冷静并提供稳定感。你的核心特质是平衡和洞察力，善于从复杂情况中提取本质并找到平衡点。在需要冷静思考和稳定性的环境中，你表现出色，但可能因过度内省而显得疏离。这种特质在大五人格模型中对应低神经质和高开放性。",
+                psychology: "青色在心理学中与平衡、冷静和深度相关。环境心理学研究表明，青色环境能促进放松和沉思状态。从哲学角度，青色作为天空和海洋的颜色，代表深度、平静和广阔视角，这与青色精神人群的内省特点和情绪稳定性相符。",
+                color: "#4fd1c7",
+                traits: ["平静", "内省", "平衡", "洞察力", "稳定", "深思"]
             }
         };
 
@@ -343,14 +687,18 @@
         const resultPage = document.getElementById('result-page');
         const startBtn = document.getElementById('start-btn');
         const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
         const restartBtn = document.getElementById('restart-btn');
         const questionElement = document.getElementById('question');
+        const questionNumberElement = document.getElementById('question-number');
         const optionsElement = document.getElementById('options');
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
         const resultColor = document.getElementById('result-color');
         const resultTitle = document.getElementById('result-title');
         const resultDescription = document.getElementById('result-description');
+        const psychologyBasis = document.getElementById('psychology-basis');
+        const traitsContainer = document.getElementById('traits-container');
 
         // 测试状态
         let currentQuestion = 0;
@@ -372,7 +720,7 @@
                 return;
             }
             
-            selectedOptions.push(selectedOption);
+            selectedOptions[currentQuestion] = selectedOption;
             selectedOption = null;
             
             if (currentQuestion < questions.length - 1) {
@@ -380,6 +728,19 @@
                 loadQuestion();
             } else {
                 showResult();
+            }
+        });
+
+        // 上一题
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                // 保存当前选择
+                if (selectedOption !== null) {
+                    selectedOptions[currentQuestion] = selectedOption;
+                }
+                
+                currentQuestion--;
+                loadQuestion();
             }
         });
 
@@ -398,6 +759,7 @@
         function loadQuestion() {
             const question = questions[currentQuestion];
             questionElement.textContent = question.question;
+            questionNumberElement.textContent = `问题 ${currentQuestion + 1}`;
             
             // 清除选项
             optionsElement.innerHTML = '';
@@ -408,6 +770,12 @@
                 optionElement.className = 'option';
                 optionElement.textContent = option.text;
                 optionElement.dataset.color = option.color;
+                
+                // 检查是否之前已选择此选项
+                if (selectedOptions[currentQuestion] === option.color) {
+                    optionElement.classList.add('selected');
+                    selectedOption = option.color;
+                }
                 
                 optionElement.addEventListener('click', () => {
                     // 移除之前的选择
@@ -428,12 +796,18 @@
             progressBar.style.width = `${progress}%`;
             progressText.textContent = `问题 ${currentQuestion + 1} / ${questions.length}`;
             
-            // 如果是最后一题，更改按钮文本
-            nextBtn.textContent = currentQuestion === questions.length - 1 ? '查看结果' : '下一题';
+            // 更新按钮状态
+            prevBtn.style.display = currentQuestion === 0 ? 'none' : 'block';
+            nextBtn.textContent = currentQuestion === questions.length - 1 ? '查看我的精神颜色' : '下一题';
         }
 
         // 显示结果
         function showResult() {
+            // 保存最后一题的选择
+            if (selectedOption !== null) {
+                selectedOptions[currentQuestion] = selectedOption;
+            }
+            
             // 计算最频繁的颜色
             const colorCount = {};
             selectedOptions.forEach(color => {
@@ -456,6 +830,16 @@
             resultColor.textContent = result.title;
             resultTitle.textContent = `你的精神颜色是：${result.title}`;
             resultDescription.textContent = result.description;
+            psychologyBasis.textContent = result.psychology;
+            
+            // 显示特质标签
+            traitsContainer.innerHTML = '';
+            result.traits.forEach(trait => {
+                const traitElement = document.createElement('div');
+                traitElement.className = 'trait';
+                traitElement.textContent = trait;
+                traitsContainer.appendChild(traitElement);
+            });
             
             testPage.classList.add('hidden');
             resultPage.classList.remove('hidden');
